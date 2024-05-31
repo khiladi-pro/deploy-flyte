@@ -154,7 +154,7 @@ common:
       ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       cert-manager.io/issuer: "letsencrypt-production"
-      acme.cert-manager.io/http01-edit-in-place: "true"
+      # acme.cert-manager.io/http01-edit-in-place: "true"
     # --- separateGrpcIngress puts GRPC routes into a separate ingress if true. Required for certain ingress controllers like nginx.
     separateGrpcIngress: true
     # --- Extra Ingress annotations applied only to the GRPC ingress. Only makes sense if `separateGrpcIngress` is enabled.
@@ -227,85 +227,13 @@ configmap:
       grpcPort: 8089
     security:
       secure: false
-      useAuth: true
+      useAuth: false
       allowCors: true
       allowedOrigins:
         # Accepting all domains for Sandbox installation
         - "*"
       allowedHeaders:
         - "Content-Type"
-    auth:
-      appAuth:
-        thirdPartyConfig:
-          flyteClient:
-            clientId: flytectl
-            redirectUri: http://localhost:53593/callback
-            scopes:
-              - offline
-              - all
-        selfAuthServer:
-          staticClients:
-            flyte-cli:
-              id: flyte-cli
-              redirect_uris:
-                - http://localhost:53593/callback
-                - http://localhost:12345/callback
-              grant_types:
-                - refresh_token
-                - authorization_code
-              response_types:
-                - code
-                - token
-              scopes:
-                - all
-                - offline
-                - access_token
-              public: true
-            flytectl:
-              id: flytectl
-              redirect_uris:
-                - http://localhost:53593/callback
-                - http://localhost:12345/callback
-              grant_types:
-                - refresh_token
-                - authorization_code
-              response_types:
-                - code
-                - token
-              scopes:
-                - all
-                - offline
-                - access_token
-              public: true
-            flytepropeller:
-              id: flytepropeller
-              # The bcrypt hash generated for your random password: see gen-pw-hash.py
-              client_secret: JDJiJDA2JG9XWkhPZGl4dUh3eEVjcUNpb0diLy5qTHptdXNyb2l5VU5GV2pOOTcuRnMxM1kzaE9aVEIy
-              redirect_uris:
-                - http://localhost:3846/callback
-              grant_types:
-                - refresh_token
-                - client_credentials
-              response_types:
-                - token
-              scopes:
-                - all
-                - offline
-                - access_token
-              public: false
-
-      authorizedUris:
-        # Use the public URL of flyteadmin (a DNS record pointing to your Ingress resource)
-        - https://flyte.staging.khiladipro.in
-        - http://flyteadmin:80
-        - http://flyteadmin.flyte.svc.cluster.local:80
-      userAuth:
-        openId:
-          baseUrl: https://accounts.google.com
-          clientId: 42577133707-pc9tbj7s443f07svdlis8q1e34dvk5v4.apps.googleusercontent.com
-          scopes:
-            - profile
-            - openid
 
   task_resource_defaults:
     task_resources:
@@ -371,15 +299,6 @@ configmap:
           config:
             stackdriver-enabled: true
             stackdriver-logresourcename: k8s_container
-
-secrets:
-  adminOauthClientCredentials:
-    # If enabled is true, helm will create and manage `flyte-secret-auth` and populate it with `clientSecret`
-    # If enabled is false, it's up to the user to create `flyte-secret-auth`
-    enabled: true
-    # Use the non-encoded version of the random password
-    clientSecret: udaanpro379
-    clientId: flytepropeller
 
 # ----------------------------------------------------------------
 # Optional Modules
