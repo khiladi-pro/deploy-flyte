@@ -14,7 +14,7 @@ locals {
   email    =             "shiv@khiladipro.com" 
   
   # Change this only if you need to add more projects in the default installation
-  flyte_projects         = ["vision"]
-  flyte_domains          = ["production"]
+  flyte_projects         = ["flytesnacks"]
+  flyte_domains          = ["development", "staging", "production"]
 }
 
