@@ -1,0 +1,20 @@
+{
+  "cSpell.words": [
+    "artifactregistry",
+    "datacatalog",
+    "dataplane",
+    "flyteadmin",
+    "flyteagent",
+    "flyteconsole",
+    "flytectl",
+    "flytepropeller",
+    "flytescheduler",
+    "flytesnacks",
+    "flyteworkers",
+    "gserviceaccount",
+    "logresourcename",
+    "rawoutput",
+    "registrywriter",
+    "stackdriver"
+  ]
+}
