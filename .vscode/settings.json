@@ -1,0 +1,24 @@
+{
+  "cSpell.words": [
+    "datacatalog",
+    "dbhost",
+    "dbname",
+    "dbpassword",
+    "flyteadmin",
+    "flyteagent",
+    "flyteconsole",
+    "flytepropeller",
+    "flytescheduler",
+    "flytesnacks",
+    "flyteworkers",
+    "gcsbucket",
+    "gserviceaccount",
+    "launchplans",
+    "letsencrypt",
+    "logresourcename",
+    "rawoutput",
+    "RDBMS",
+    "sparkoperator",
+    "stackdriver"
+  ]
+}
