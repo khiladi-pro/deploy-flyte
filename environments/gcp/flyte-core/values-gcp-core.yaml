@@ -15,6 +15,7 @@ userSettings:
 #
 
 flyteadmin:
+  maxParallelism: 100
   replicaCount: 1
   serviceAccount:
     # -- If the service account is created by you, make this false, else a new service account will be created and the flyteadmin role will be added
@@ -327,7 +328,7 @@ configmap:
   core:
     propeller:
       rawoutput-prefix: "gs://{{ .Values.userSettings.bucketName }}/"
-      workers: 40
+      workers: 100
       gc-interval: 12h
       max-workflow-retries: 50
       kube-client-config:
@@ -399,23 +400,23 @@ cluster_resource_manager:
       customData:
         - production:
             - projectQuotaCpu:
-                value: "10"
+                value: "200"
             - projectQuotaMemory:
-                value: "10000Mi"
+                value: "400Gi"
             - gsa:
                 value: "{{ .Values.userSettings.flyteworkersServiceAccount }}@{{ .Values.userSettings.googleProjectId }}.iam.gserviceaccount.com"
         - staging:
             - projectQuotaCpu:
-                value: "10"
+                value: "200"
             - projectQuotaMemory:
-                value: "10000Mi"
+                value: "400Gi"
             - gsa:
                 value: "{{ .Values.userSettings.flyteworkersServiceAccount }}@{{ .Values.userSettings.googleProjectId }}.iam.gserviceaccount.com"
         - development:
             - projectQuotaCpu:
-                value: "10"
+                value: "200"
             - projectQuotaMemory:
-                value: "10000Mi"
+                value: "400Gi"
             - gsa:
                 value: "{{ .Values.userSettings.flyteworkersServiceAccount }}@{{ .Values.userSettings.googleProjectId }}.iam.gserviceaccount.com"
 
