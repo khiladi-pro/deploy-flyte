@@ -13,6 +13,7 @@
     "flyteworkers",
     "gcsbucket",
     "gserviceaccount",
+    "interruptible",
     "launchplans",
     "letsencrypt",
     "logresourcename",
