@@ -11,10 +11,13 @@
     "flytescheduler",
     "flytesnacks",
     "flyteworkers",
+    "gcfs",
     "gserviceaccount",
+    "interruptible",
     "logresourcename",
     "rawoutput",
     "registrywriter",
-    "stackdriver"
+    "stackdriver",
+    "subnetwork"
   ]
 }

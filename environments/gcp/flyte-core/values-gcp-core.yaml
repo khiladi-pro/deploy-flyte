@@ -341,6 +341,15 @@ configmap:
           rate: 100
           capacity: 1000
 
+  k8s:
+  plugins:
+    k8s:
+      interruptible-tolerations:
+        - key: "cloud.google.com/gke-spot"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+
   enabled_plugins:
     # -- Tasks specific configuration [structure](https://pkg.go.dev/github.com/flyteorg/flytepropeller/pkg/controller/nodes/task/config#GetConfig)
     tasks:
