@@ -11,6 +11,7 @@
     "flytescheduler",
     "flytesnacks",
     "flyteworkers",
+    "gcfs",
     "gcsbucket",
     "gserviceaccount",
     "interruptible",
@@ -20,6 +21,7 @@
     "rawoutput",
     "RDBMS",
     "sparkoperator",
-    "stackdriver"
+    "stackdriver",
+    "subnetwork"
   ]
 }

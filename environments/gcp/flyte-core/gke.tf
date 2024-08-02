@@ -23,8 +23,11 @@ module "gke" {
     {
       name         = "default"
       machine_type = "e2-standard-2"
-      min_count    = 0
-      max_count    = 3
+      node_locations = "asia-south1-b"
+      location_policy = "ANY"
+      initial_node_count = 1
+      total_min_count = 0
+      total_max_count = 1
       # Set to true if you want to enable Image Streaming. Learn more: https://cloud.google.com/kubernetes-engine/docs/how-to/image-streaming to speed up pulling of images
       enable_gcfs  = true 
     }
