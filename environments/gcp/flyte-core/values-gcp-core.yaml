@@ -236,19 +236,77 @@ configmap:
       allowedHeaders:
         - "Content-Type"
     auth:
-      enabled: true
-      oidc:
-        baseUrl: https://accounts.google.com # Uncomment for Google
-        # Replace with the client ID and secret created for Flyte in your IdP
-        clientId: 42577133707-ehniq2anqprhig7hchuhnsl7r9d49e57.apps.googleusercontent.com
-        clientSecret: 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
-      internal:
-        clientSecret: 'cbfrhewufh384h*#(hjhgvc'
-        # Use the output of step #2 (only the content inside of '')
-        clientSecretHash: JDJiJDA2JDI5TzdEZTVIQWp2ZXNrWHRzL2VEbXV2a3ZPNWFSODJTYW5wZmZPanZjTE81TWNFb3JrZU95
+      appAuth:
+        thirdPartyConfig:
+          flyteClient:
+            clientId: flytectl
+            redirectUri: http://localhost:53593/callback
+            scopes:
+              - offline
+              - all
+        selfAuthServer:
+          staticClients:
+            flyte-cli:
+              id: flyte-cli
+              redirect_uris:
+                - http://localhost:53593/callback
+                - http://localhost:12345/callback
+              grant_types:
+                - refresh_token
+                - authorization_code
+              response_types:
+                - code
+                - token
+              scopes:
+                - all
+                - offline
+                - access_token
+              public: true
+            flytectl:
+              id: flytectl
+              redirect_uris:
+                - http://localhost:53593/callback
+                - http://localhost:12345/callback
+              grant_types:
+                - refresh_token
+                - authorization_code
+              response_types:
+                - code
+                - token
+              scopes:
+                - all
+                - offline
+                - access_token
+              public: true
+            flytepropeller:
+              id: flytepropeller
+              # The bcrypt hash generated for your random password: see gen-pw-hash.py
+              client_secret: JDJiJDA2JDI5TzdEZTVIQWp2ZXNrWHRzL2VEbXV2a3ZPNWFSODJTYW5wZmZPanZjTE81TWNFb3JrZU95
+              redirect_uris:
+                - http://localhost:3846/callback
+              grant_types:
+                - refresh_token
+                - client_credentials
+              response_types:
+                - token
+              scopes:
+                - all
+                - offline
+                - access_token
+              public: false
 
       authorizedUris:
+        # Use the public URL of flyteadmin (a DNS record pointing to your Ingress resource)
         - https://flyte.staging.khiladipro.in
+        - http://flyteadmin:80
+        - http://flyteadmin.flyte.svc.cluster.local:80
+      userAuth:
+        openId:
+          baseUrl: https://accounts.google.com
+          clientId: 42577133707-ehniq2anqprhig7hchuhnsl7r9d49e57.apps.googleusercontent.com
+          scopes:
+            - profile
+            - openid
 
   task_resource_defaults:
     task_resources:
@@ -330,7 +388,7 @@ secrets:
     # If enabled is false, it's up to the user to create `flyte-secret-auth`
     enabled: true
     # Use the non-encoded version of the random password
-    clientSecret: udaanpro379
+    clientSecret: cbfrhewufh384h*#(hjhgvc
     clientId: flytepropeller
 
 # ----------------------------------------------------------------
