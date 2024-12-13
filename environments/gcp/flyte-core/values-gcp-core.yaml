@@ -226,15 +226,15 @@ configmap:
     server:
       httpPort: 8088
       grpcPort: 8089
-    security:
-      secure: false
-      useAuth: true
-      allowCors: true
-      allowedOrigins:
-        # Accepting all domains for Sandbox installation
-        - "*"
-      allowedHeaders:
-        - "Content-Type"
+      security:
+        secure: false
+        useAuth: true
+        allowCors: true
+        allowedHeaders:
+          - Content-Type
+          - flyte-authorization
+        allowedOrigins:
+          - '*'
     auth:
       appAuth:
         thirdPartyConfig:
@@ -249,8 +249,8 @@ configmap:
             flyte-cli:
               id: flyte-cli
               redirect_uris:
-                - http://localhost:53593/callback
-                - http://localhost:12345/callback
+              - http://localhost:53593/callback
+              - http://localhost:12345/callback
               grant_types:
                 - refresh_token
                 - authorization_code
@@ -280,8 +280,8 @@ configmap:
               public: true
             flytepropeller:
               id: flytepropeller
-              # The bcrypt hash generated for your random password: see gen-pw-hash.py
-              client_secret: JDJiJDA2JG9XWkhPZGl4dUh3eEVjcUNpb0diLy5qTHptdXNyb2l5VU5GV2pOOTcuRnMxM1kzaE9aVEIy
+     # Use the bcrypt hash generated for your random password
+              client_secret: "JDJiJDA2JGlGdFBnaUJQQVJRUTdVMkpoVkZHbGVhODRvU1YxeDlsZkFMNmR5eDhzR3ZzeFlobWw4MURt"
               redirect_uris:
                 - http://localhost:3846/callback
               grant_types:
@@ -295,6 +295,7 @@ configmap:
                 - access_token
               public: false
 
+
       authorizedUris:
         # Use the public URL of flyteadmin (a DNS record pointing to your Ingress resource)
         - https://flyte.staging.khiladipro.in
@@ -303,7 +304,7 @@ configmap:
       userAuth:
         openId:
           baseUrl: https://accounts.google.com
-          clientId: 42577133707-pc9tbj7s443f07svdlis8q1e34dvk5v4.apps.googleusercontent.com
+          clientId: 42577133707-ehniq2anqprhig7hchuhnsl7r9d49e57.apps.googleusercontent.com
           scopes:
             - profile
             - openid
@@ -388,7 +389,7 @@ secrets:
     # If enabled is false, it's up to the user to create `flyte-secret-auth`
     enabled: true
     # Use the non-encoded version of the random password
-    clientSecret: udaanpro379
+    clientSecret: "uef78wy4gf4i7wgwbh"
     clientId: flytepropeller
 
 # ----------------------------------------------------------------
