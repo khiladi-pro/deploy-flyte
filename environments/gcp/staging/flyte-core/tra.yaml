@@ -1,0 +1,8 @@
+project: flytesnacks
+domain: development
+defaults:
+  cpu: "1"
+  memory: 1000Mi
+limits:
+  cpu: "4"
+  memory: 4000Mi
