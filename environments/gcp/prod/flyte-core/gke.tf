@@ -15,8 +15,7 @@ module "gke" {
   subnetwork               = local.gke_subnetwork
   ip_range_pods            = local.gke_pods_range_name
   ip_range_services        = local.gke_services_range_name
-  create_service_account   = false
-  service_account          = "tf-gke-flyte-gcp-q5md@kpro-prod.iam.gserviceaccount.com"
+  create_service_account   = true
   identity_namespace       = "enabled"
   remove_default_node_pool = true
 
