@@ -9,7 +9,7 @@ The instructions and files in this repo, are designed to help you prepare your c
 
 ## Tutorials
 * ### [Flyte on AWS](environments/aws/flyte-binary/README.md)
-* ### [Flyte on GCP](environments/gcp/flyte-core/README.md) 
+* ### [Flyte on GCP](environments/gcp/staging/flyte-core/README.md) 
 
 ---
 Questions? Join the [#flyte-deployment](https://flyte-org.slack.com/archives/C01P3B761A6) channel. We're happy to help!

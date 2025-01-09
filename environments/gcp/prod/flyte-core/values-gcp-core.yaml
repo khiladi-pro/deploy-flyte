@@ -281,7 +281,7 @@ configmap:
             flytepropeller:
               id: flytepropeller
      # Use the bcrypt hash generated for your random password
-              client_secret: "JDJiJDA2JGlGdFBnaUJQQVJRUTdVMkpoVkZHbGVhODRvU1YxeDlsZkFMNmR5eDhzR3ZzeFlobWw4MURt"
+              client_secret: "JDJiJDA2JHV4dkVWanhsM0hrdk1vY0dTU2xGOC4xbllXdWtOeVBLbmEyMWhGTjNZd3I3SVBnMVlrQUgy"
               redirect_uris:
                 - http://localhost:3846/callback
               grant_types:
@@ -298,7 +298,7 @@ configmap:
 
       authorizedUris:
         # Use the public URL of flyteadmin (a DNS record pointing to your Ingress resource)
-        - https://flyte.staging.khiladipro.in
+        - https://flyte.khiladipro.in
         - http://flyteadmin:80
         - http://flyteadmin.flyte.svc.cluster.local:80
       userAuth:
@@ -389,7 +389,7 @@ secrets:
     # If enabled is false, it's up to the user to create `flyte-secret-auth`
     enabled: true
     # Use the non-encoded version of the random password
-    clientSecret: "uef78wy4gf4i7wgwbh"
+    clientSecret: {{secrets.PROD_SECRET}}
     clientId: flytepropeller
 
 # ----------------------------------------------------------------
