@@ -21,17 +21,51 @@ module "gke" {
 
   node_pools = [
     {
-      name         = "default"
-      machine_type = "e2-standard-2"
-      node_locations = "asia-south1-a"
-      location_policy = "ANY"
+      name               = "default-spot"
+      machine_type      = "e2-standard-8"
+      disk_size_gb      = 100
+      enable_gcfs       = true
+    },
+    {
+      name              = "default-gpu"
+      machine_type      = "g2-standard-4"
+      disk_size_gb      = 100
+      enable_gcfs       = true
+      disk_type         = "pd-ssd"
+    },
+    {
+      name              = "default"
+      machine_type      = "e2-standard-2"
+      disk_size_gb      = 100
+      node_locations    = "asia-south1-a"
+      location_policy   = "ANY"
       initial_node_count = 1
-      total_min_count = 0
-      total_max_count = 1
-      # Set to true if you want to enable Image Streaming. Learn more: https://cloud.google.com/kubernetes-engine/docs/how-to/image-streaming to speed up pulling of images
-      enable_gcfs  = true 
+      total_min_count   = 0
+      total_max_count   = 1
+      enable_gcfs       = true
     }
   ]
+
+  node_pools_taints = {
+    all = []
+
+    default-spot = [
+      {
+        key    = "cloud.google.com/gke-spot"
+        value  = true
+        effect = "NO_SCHEDULE"
+      },
+    ]
+
+    default-gpu = [
+      {
+        key    = "nvidia.com/gpu"
+        value  = "present"
+        effect = "NO_SCHEDULE"
+      },
+    ]
+  }
+
   depends_on = [google_project_service.project ]
 }
 
