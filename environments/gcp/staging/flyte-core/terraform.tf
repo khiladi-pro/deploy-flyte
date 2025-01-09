@@ -34,9 +34,4 @@ terraform {
   backend "gcs" {
     bucket = "flyte-storage.khiladipro.com" #Replace with the name of the GCS bucket you'll use to store TF state
   }
-
-  backend "gcs" {
-    bucket = "prod-terraform-state"
-    prefix = "gke-cluster"
-  }
 }

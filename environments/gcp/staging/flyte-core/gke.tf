@@ -31,7 +31,7 @@ module "gke" {
       machine_type      = "g2-standard-4"
       disk_size_gb      = 100
       enable_gcfs       = true
-      disk_type         = "pd-ssd"
+      disk_type         = "pd-ssd"  
     },
     {
       name              = "default"
@@ -68,6 +68,8 @@ module "gke" {
 
   depends_on = [google_project_service.project ]
 }
+
+
 
 output gke_cluster_name {
   value = module.gke.name
