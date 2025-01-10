@@ -21,7 +21,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Add cache for Terraform plugins and modules
       - name: Cache Terraform
         uses: actions/cache@v3
         with:
@@ -36,7 +35,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.3.0"
-          terraform_wrapper: false  # Improves performance
+          terraform_wrapper: false
 
       - name: Setup GCloud CLI
         uses: google-github-actions/setup-gcloud@v2
@@ -44,6 +43,21 @@ jobs:
           project_id: kpro-staging
           service_account_key: ${{ secrets.STAGING_GOOGLE_CREDENTIALS }}
           export_default_credentials: true
+
+      - name: Get GKE Credentials
+        run: |
+          echo '${{ secrets.STAGING_GOOGLE_CREDENTIALS }}' > /tmp/gcloud-service-key.json
+          gcloud auth activate-service-account --key-file="/tmp/gcloud-service-key.json"
+          gcloud container clusters get-credentials flyte-gcp --region asia-south1
+        
+      - name: Debug Service Account Key
+        run: |
+          if [ -f /tmp/gcloud-service-key.json ]; then
+            echo "Service account key file exists"
+            jq -r '.type' /tmp/gcloud-service-key.json || echo "Invalid JSON format"
+          else
+            echo "Service account key file does not exist"
+          fi
 
       - name: Terraform Init
         run: |
