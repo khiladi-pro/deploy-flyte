@@ -17,15 +17,15 @@ provider "kubernetes" {
 }
 
 provider "kubectl" {
-host                   = "https://${module.gke.endpoint}"
+  host                   = "https://${module.gke.endpoint}"
   token                  = data.google_client_config.current.access_token
   cluster_ca_certificate = base64decode(module.gke.ca_certificate)
 }
 
 provider "helm" {
   kubernetes {
-  host                   = "https://${module.gke.endpoint}"
-  token                  = data.google_client_config.current.access_token
-  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+    host                   = "https://${module.gke.endpoint}"
+    token                  = data.google_client_config.current.access_token
+    cluster_ca_certificate = base64decode(module.gke.ca_certificate)
   }
 }

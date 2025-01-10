@@ -1,17 +1,17 @@
 locals {
-  flyte-host =           "${local.application}.${local.dns-domain}" #If you plan on using a different FQDN for Flyte, replace this with your FQDN (e.g flyte.example.com)
+  flyte-host = "${local.application}.${local.dns-domain}" #If you plan on using a different FQDN for Flyte, replace this with your FQDN (e.g flyte.example.com)
 }
 
 #Installs the flyte-core Helm chart in the flyte namespace using the outputs of Terraform modules
 resource "helm_release" "flyte-core" {
-  depends_on       = [
-                      kubectl_manifest.cert-manager-issuer,
-                      module.nginx-controller
-                      ]
-  name             = "flyte-core"
-  namespace        = "flyte"
-  repository       = "https://flyteorg.github.io/flyte"
-  chart            = "flyte-core"
+  depends_on = [
+    kubectl_manifest.cert-manager-issuer,
+    module.nginx-controller
+  ]
+  name       = "flyte-core"
+  namespace  = "flyte"
+  repository = "https://flyteorg.github.io/flyte"
+  chart      = "flyte-core"
   values = [templatefile("values-gcp-core.yaml", {
     gcp-project-id               = local.project_id
     dbpassword                   = module.flyte-db.additional_users[0].password
