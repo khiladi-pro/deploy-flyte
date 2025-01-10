@@ -25,9 +25,6 @@ module "gke" {
       machine_type      = "e2-standard-8"
       disk_size_gb      = 100
       enable_gcfs       = true
-      total_min_count   = 0
-      total_max_count   = 3
-      node_locations    = "asia-south1-a"
     },
     {
       name              = "default-gpu"
@@ -35,9 +32,6 @@ module "gke" {
       disk_size_gb      = 100
       enable_gcfs       = true
       disk_type         = "pd-ssd"  
-      total_min_count   = 0
-      total_max_count   = 2
-      node_locations    = "asia-south1-b"
     },
     {
       name              = "default"
