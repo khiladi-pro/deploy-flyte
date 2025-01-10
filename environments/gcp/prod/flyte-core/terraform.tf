@@ -5,7 +5,7 @@ terraform {
       version = ">= 4.41.0"
     }
 
-     kubectl = {
+    kubectl = {
       source  = "alekc/kubectl"
       version = ">= 2.0.2"
     }
@@ -15,22 +15,22 @@ terraform {
       version = ">= 4.41.0"
     }
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
       version = ">=2.11.0"
-  }
+    }
 
-  kubernetes = {
-      source = "hashicorp/kubernetes"
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
       version = ">=2.23.0"
     }
 
     http = {
-      source = "hashicorp/http"
+      source  = "hashicorp/http"
       version = ">=3.4.0"
     }
   }
   required_version = ">= 1.3.0"
-  
+
   backend "gcs" {
     bucket = "flyte-storage.khiladipro.com" #Replace with the name of the GCS bucket you'll use to store TF state
   }

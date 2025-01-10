@@ -8,8 +8,8 @@ module "flyte-db" {
   zone                 = "${local.region}-b"
   tier                 = "db-custom-1-3840"
   module_depends_on    = [google_service_networking_connection.default]
-# See https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance#private-ip-instance
-  
+  # See https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance#private-ip-instance
+
   additional_databases = [
     {
       name      = "flyteadmin"
@@ -27,12 +27,12 @@ module "flyte-db" {
   ]
 
   ip_configuration = {
-    allocated_ip_range  = null,
-    authorized_networks = [],
-    ipv4_enabled        = false,
+    allocated_ip_range                            = null,
+    authorized_networks                           = [],
+    ipv4_enabled                                  = false,
     enable_private_path_for_google_cloud_services = true
-    private_network     = module.network.network_self_link
-    
-    require_ssl         = null
+    private_network                               = module.network.network_self_link
+
+    require_ssl = null
   }
 }
