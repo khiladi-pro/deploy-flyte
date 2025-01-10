@@ -281,7 +281,7 @@ configmap:
             flytepropeller:
               id: flytepropeller
      # Use the bcrypt hash generated for your random password
-              client_secret: "JDJiJDA2JHV4dkVWanhsM0hrdk1vY0dTU2xGOC4xbllXdWtOeVBLbmEyMWhGTjNZd3I3SVBnMVlrQUgy"
+              client_secret: {{var.PROD_SECRET_BCRYPT_HASH}}
               redirect_uris:
                 - http://localhost:3846/callback
               grant_types:
