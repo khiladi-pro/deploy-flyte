@@ -21,28 +21,28 @@ module "gke" {
 
   node_pools = [
     {
-      name               = "default-spot"
-      machine_type      = "e2-standard-8"
-      disk_size_gb      = 100
-      enable_gcfs       = true
+      name         = "default-spot"
+      machine_type = "e2-standard-8"
+      disk_size_gb = 100
+      enable_gcfs  = true
     },
     {
-      name              = "default-gpu"
-      machine_type      = "g2-standard-4"
-      disk_size_gb      = 100
-      enable_gcfs       = true
-      disk_type         = "pd-ssd"  
+      name         = "default-gpu"
+      machine_type = "g2-standard-4"
+      disk_size_gb = 100
+      enable_gcfs  = true
+      disk_type    = "pd-ssd"
     },
     {
-      name              = "default"
-      machine_type      = "e2-standard-2"
-      disk_size_gb      = 100
-      node_locations    = "asia-south1-a"
-      location_policy   = "ANY"
+      name               = "default"
+      machine_type       = "e2-standard-2"
+      disk_size_gb       = 100
+      node_locations     = "asia-south1-a"
+      location_policy    = "ANY"
       initial_node_count = 1
-      total_min_count   = 0
-      total_max_count   = 1
-      enable_gcfs       = true
+      total_min_count    = 0
+      total_max_count    = 1
+      enable_gcfs        = true
     }
   ]
 
@@ -66,12 +66,12 @@ module "gke" {
     ]
   }
 
-  depends_on = [google_project_service.project ]
+  depends_on = [google_project_service.project]
 }
 
 
 
-output gke_cluster_name {
+output "gke_cluster_name" {
   value = module.gke.name
 
 }
