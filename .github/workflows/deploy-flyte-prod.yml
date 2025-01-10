@@ -50,7 +50,11 @@ jobs:
           echo '${{ secrets.PROD_GOOGLE_CREDENTIALS }}' > /tmp/gcloud-service-key.json
           gcloud auth activate-service-account --key-file="/tmp/gcloud-service-key.json"
           gcloud container clusters get-credentials flyte-gcp --region asia-south1
-        
+      
+      - name: Update Values File
+        run: |
+          sed -i "s/{{secrets.PROD_SECRET}}/${{ secrets.PROD_CLIENT_SECRET }}/g" values-gcp-core.yaml
+
 
       - name: Terraform Init
         run: |
