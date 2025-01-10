@@ -26,7 +26,6 @@ jobs:
         with:
           path: |
             ~/.terraform.d/plugin-cache
-            .terraform
           key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
           restore-keys: |
             ${{ runner.os }}-terraform-
@@ -49,7 +48,7 @@ jobs:
           echo '${{ secrets.STAGING_GOOGLE_CREDENTIALS }}' > /tmp/gcloud-service-key.json
           gcloud auth activate-service-account --key-file="/tmp/gcloud-service-key.json"
           gcloud container clusters get-credentials flyte-gcp --region asia-south1
-
+      
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -72,9 +71,36 @@ jobs:
 
       - name: Terraform Init
         run: |
+          rm -rf .terraform
+          rm -f .terraform.lock.hcl
           mkdir -p ~/.terraform.d/plugin-cache
           echo 'plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"' > ~/.terraformrc
-          terraform init -input=false
+          
+          # First init without workspace selection
+          terraform init -input=false -upgrade -reconfigure
+          
+          # Temporarily unset TF_WORKSPACE to allow workspace creation/selection
+          TF_WORKSPACE_TEMP=${{vars.TF_WORKSPACE}}
+          unset TF_WORKSPACE
+
+          # Create workspace if it doesn't exist
+          terraform workspace list || true
+          terraform workspace new ${{vars.TF_WORKSPACE}} || terraform workspace select ${{vars.TF_WORKSPACE}}
+          
+          # Restore TF_WORKSPACE
+          export TF_WORKSPACE=$TF_WORKSPACE_TEMP
+
+          # Reinit with the workspace
+          terraform init -input=false -upgrade
+
+      - name: Debug Terraform Workspace
+        run: |
+          echo "Current TF_WORKSPACE env: $TF_WORKSPACE"
+          echo "Current workspace from terraform:"
+          terraform workspace show
+          echo "Available workspaces:"
+          terraform workspace list
+
 
       - name: Terraform Format & Validate
         run: |
