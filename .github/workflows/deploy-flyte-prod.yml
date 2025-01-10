@@ -21,7 +21,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Add cache for Terraform plugins and modules
       - name: Cache Terraform
         uses: actions/cache@v3
         with:
@@ -51,10 +50,25 @@ jobs:
           gcloud auth activate-service-account --key-file="/tmp/gcloud-service-key.json"
           gcloud container clusters get-credentials flyte-gcp --region asia-south1
       
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Python Dependencies
+        run: |
+          pip install bcrypt
+
       - name: Update Values File
         run: |
-          sed -i "s/{{secrets.PROD_SECRET}}/${{ secrets.PROD_CLIENT_SECRET }}/g" values-gcp-core.yaml
-
+          BCRYPT_HASH=$(python3 -c "
+          import bcrypt, base64
+          print(base64.b64encode(bcrypt.hashpw('${{ secrets.PROD_CLIENT_SECRET }}'.encode('utf-8'), bcrypt.gensalt(6))).decode('utf-8'))
+          ")
+          
+          # Replace both the raw secret and its bcrypt hash
+          sed -i "s|{{secrets.PROD_SECRET}}|${{ secrets.PROD_CLIENT_SECRET }}|g" values-gcp-core.yaml
+          sed -i "s|{{var.PROD_SECRET_BCRYPT_HASH}}|$BCRYPT_HASH|g" values-gcp-core.yaml
 
       - name: Terraform Init
         run: |

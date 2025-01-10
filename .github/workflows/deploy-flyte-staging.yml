@@ -49,19 +49,26 @@ jobs:
           echo '${{ secrets.STAGING_GOOGLE_CREDENTIALS }}' > /tmp/gcloud-service-key.json
           gcloud auth activate-service-account --key-file="/tmp/gcloud-service-key.json"
           gcloud container clusters get-credentials flyte-gcp --region asia-south1
-        
-      - name: Debug Service Account Key
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Python Dependencies
         run: |
-          if [ -f /tmp/gcloud-service-key.json ]; then
-            echo "Service account key file exists"
-            jq -r '.type' /tmp/gcloud-service-key.json || echo "Invalid JSON format"
-          else
-            echo "Service account key file does not exist"
-          fi
+          pip install bcrypt
 
       - name: Update Values File
         run: |
-          sed -i "s/{{secrets.STAGING_SECRET}}/${{ secrets.STAGING_CLIENT_SECRET }}/g" values-gcp-core.yaml
+          BCRYPT_HASH=$(python3 -c "
+          import bcrypt, base64
+          print(base64.b64encode(bcrypt.hashpw('${{ secrets.STAGING_CLIENT_SECRET }}'.encode('utf-8'), bcrypt.gensalt(6))).decode('utf-8'))
+          ")
+          
+          # Replace both the raw secret and its bcrypt hash
+          sed -i "s|{{secrets.STAGING_SECRET}}|${{ secrets.STAGING_CLIENT_SECRET }}|g" values-gcp-core.yaml
+          sed -i "s|{{var.STAGING_SECRET_BCRYPT_HASH}}|$BCRYPT_HASH|g" values-gcp-core.yaml
 
       - name: Terraform Init
         run: |
