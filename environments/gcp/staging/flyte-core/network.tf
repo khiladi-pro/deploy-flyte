@@ -17,7 +17,7 @@ module "network" {
   secondary_ranges = {
     gke = [
       {
-        
+
         range_name    = "gke-pods"
         ip_cidr_range = "172.16.0.0/16"
       },
@@ -27,7 +27,7 @@ module "network" {
       },
     ]
   }
-  depends_on = [ google_project_service.project ]
+  depends_on = [google_project_service.project]
 }
 
 resource "google_compute_global_address" "service_networking" {
@@ -36,7 +36,7 @@ resource "google_compute_global_address" "service_networking" {
   address_type  = "INTERNAL"
   prefix_length = 16
   network       = module.network.network_self_link
-  depends_on = [google_project_service.project ]
+  depends_on    = [google_project_service.project]
 }
 
 resource "google_service_networking_connection" "default" {

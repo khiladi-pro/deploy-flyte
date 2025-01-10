@@ -35,7 +35,7 @@ resource "google_service_account" "flyteworkers-gsa" {
 #GSA to be used to push container images to Artifact Registry. 
 #https://cloud.google.com/artifact-registry/docs/docker/authentication#token
 resource "google_service_account" "artifactregistry-writer" {
-  account_id = "${local.name_prefix}-registrywriter" 
+  account_id = "${local.name_prefix}-registrywriter"
 }
 
 
@@ -43,7 +43,7 @@ resource "google_service_account" "artifactregistry-writer" {
 resource "google_project_iam_custom_role" "custom_IAM_roles" {
 
   for_each = {
-    
+
     flyteadmin = [
       "iam.serviceAccounts.signBlob",
       "storage.buckets.get",
@@ -85,44 +85,44 @@ resource "google_project_iam_custom_role" "custom_IAM_roles" {
       "storage.objects.update"
     ],
   }
-  role_id = each.key
-  title = each.key
+  role_id     = each.key
+  title       = each.key
   permissions = each.value
-  }
- 
- # 3. Define role<>GSA bindinggs at the project level
-resource google_project_iam_binding "flyteadmin-binding" {
+}
+
+# 3. Define role<>GSA bindinggs at the project level
+resource "google_project_iam_binding" "flyteadmin-binding" {
   project = local.project_id
-  role = google_project_iam_custom_role.custom_IAM_roles["flyteadmin"].id
+  role    = google_project_iam_custom_role.custom_IAM_roles["flyteadmin"].id
   members = ["serviceAccount:${google_service_account.flyteadmin-gsa.email}"]
 }
 
 resource "google_project_iam_binding" "flytepropeller-binding" {
   project = local.project_id
-  role = google_project_iam_custom_role.custom_IAM_roles["flytepropeller"].id
+  role    = google_project_iam_custom_role.custom_IAM_roles["flytepropeller"].id
   members = ["serviceAccount:${google_service_account.flytepropeller-gsa.email}"]
-  
+
 }
 
 resource "google_project_iam_binding" "flytescheduler-binding" {
   project = local.project_id
-  role = google_project_iam_custom_role.custom_IAM_roles["flytescheduler"].id
-  members =["serviceAccount:${google_service_account.flytescheduler-gsa.email}"]
-  
+  role    = google_project_iam_custom_role.custom_IAM_roles["flytescheduler"].id
+  members = ["serviceAccount:${google_service_account.flytescheduler-gsa.email}"]
+
 }
 
 resource "google_project_iam_binding" "datacatalog-binding" {
   project = local.project_id
-  role = google_project_iam_custom_role.custom_IAM_roles["datacatalog"].id
+  role    = google_project_iam_custom_role.custom_IAM_roles["datacatalog"].id
   members = ["serviceAccount:${google_service_account.datacatalog-gsa.email}"]
-  
+
 }
 
 resource "google_project_iam_binding" "flyteworkers-binding" {
   project = local.project_id
-  role = google_project_iam_custom_role.custom_IAM_roles["flyteworkers"].id
+  role    = google_project_iam_custom_role.custom_IAM_roles["flyteworkers"].id
   members = ["serviceAccount:${google_service_account.flyteworkers-gsa.email}"]
-  
+
 }
 
 #This particular binding enables the necessary permissions for the Flyte Pods to 
@@ -130,45 +130,45 @@ resource "google_project_iam_binding" "flyteworkers-binding" {
 #Feel free to remove it if you plan on using a different container registry.
 resource "google_project_iam_binding" "flyteworkers-binding-registry" {
   project = local.project_id
-  role = "roles/artifactregistry.reader"
-  members = ["serviceAccount:${google_service_account.flyteworkers-gsa.email}"] 
+  role    = "roles/artifactregistry.reader"
+  members = ["serviceAccount:${google_service_account.flyteworkers-gsa.email}"]
 }
 
 #This permission is granted so the end user/CI can obtain an access token to push container images to AR. 
 #See https://cloud.google.com/artifact-registry/docs/docker/authentication#token
-resource "google_project_iam_binding" "artifactregistry-writer"{
+resource "google_project_iam_binding" "artifactregistry-writer" {
   project = local.project_id
-  role = "roles/artifactregistry.writer"
-  members = ["serviceAccount:${google_service_account.artifactregistry-writer.email}"] 
+  role    = "roles/artifactregistry.writer"
+  members = ["serviceAccount:${google_service_account.artifactregistry-writer.email}"]
 
 }
 
 # Step 4 Bind GSAs with KSAs as Workload Identity Users, enabling impersonation
-resource google_service_account_iam_binding "flyteadmin-workload-identity-binding" {
-   role               = "roles/iam.workloadIdentityUser"
-   service_account_id = google_service_account.flyteadmin-gsa.name
-   members = ["serviceAccount:${module.gke.identity_namespace}[flyte/flyteadmin]"]
+resource "google_service_account_iam_binding" "flyteadmin-workload-identity-binding" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.flyteadmin-gsa.name
+  members            = ["serviceAccount:${module.gke.identity_namespace}[flyte/flyteadmin]"]
 
 }
 
-resource google_service_account_iam_binding "flytepropeller-workload-identity-binding" {
-   role               = "roles/iam.workloadIdentityUser"
-   service_account_id = google_service_account.flytepropeller-gsa.name
-   members = ["serviceAccount:${module.gke.identity_namespace}[flyte/flytepropeller]"]
+resource "google_service_account_iam_binding" "flytepropeller-workload-identity-binding" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.flytepropeller-gsa.name
+  members            = ["serviceAccount:${module.gke.identity_namespace}[flyte/flytepropeller]"]
 
 }
 
-resource google_service_account_iam_binding "flytescheduler-workload-identity-binding" {
-   role               = "roles/iam.workloadIdentityUser"
-   service_account_id = google_service_account.flytescheduler-gsa.name
-   members = ["serviceAccount:${module.gke.identity_namespace}[flyte/flytescheduler]"]
+resource "google_service_account_iam_binding" "flytescheduler-workload-identity-binding" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.flytescheduler-gsa.name
+  members            = ["serviceAccount:${module.gke.identity_namespace}[flyte/flytescheduler]"]
 
 }
 
-resource google_service_account_iam_binding "datacatalog-workload-identity-binding" {
-   role               = "roles/iam.workloadIdentityUser"
-   service_account_id = google_service_account.datacatalog-gsa.name
-   members = ["serviceAccount:${module.gke.identity_namespace}[flyte/datacatalog]"]
+resource "google_service_account_iam_binding" "datacatalog-workload-identity-binding" {
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = google_service_account.datacatalog-gsa.name
+  members            = ["serviceAccount:${module.gke.identity_namespace}[flyte/datacatalog]"]
 
 }
 
@@ -195,7 +195,7 @@ data "google_iam_policy" "flyte-worker-workload-identity" {
 }
 
 resource "google_service_account_iam_policy" "flyte-worker-workload-identity" {
-  depends_on = [ module.gke.identity_namespace ]
+  depends_on         = [module.gke.identity_namespace]
   service_account_id = google_service_account.flyteworkers-gsa.name
   policy_data        = data.google_iam_policy.flyte-worker-workload-identity.policy_data
 }
