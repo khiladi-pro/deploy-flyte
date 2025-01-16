@@ -85,7 +85,7 @@ jobs:
 
           # Create workspace if it doesn't exist
           terraform workspace list || true
-          terraform workspace new $TF_WORKSPACE || terraform workspace select $TF_WORKSPACE
+          terraform workspace new $TF_WORKSPACE_TEMP || terraform workspace select $TF_WORKSPACE_TEMP
           
           # Restore TF_WORKSPACE
           export TF_WORKSPACE=$TF_WORKSPACE_TEMP
